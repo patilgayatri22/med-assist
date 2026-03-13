@@ -10,8 +10,8 @@ import { HighAlertVerify } from './components/HighAlertVerify';
 import { DispenseLog } from './components/DispenseLog';
 import { Alerts } from './components/Alerts';
 
-function getStatusLabel(outcome: RunOutcome, armPhase?: RunState['armPhase']): string {
-  if (outcome === 'running') return 'Running checks…';
+function getStatusLabel(outcome: RunOutcome, armPhase?: RunState['armPhase'], isDemoRunning?: boolean): string {
+  if (outcome === 'running') return isDemoRunning ? 'Running checks…' : 'Idle';
   if (outcome === 'dispense') {
     if (armPhase === 'handoff_ready') return 'Handoff ready';
     if (armPhase === 'moving_to_cell' || armPhase === 'gripping' || armPhase === 'returning_to_handoff')
@@ -92,7 +92,7 @@ export default function App() {
     );
   }
 
-  const statusLabel = getStatusLabel(runState.outcome, runState.armPhase);
+  const statusLabel = getStatusLabel(runState.outcome, runState.armPhase, isDemoMode);
   const trayVerified = runState.outcome === 'dispense' && runState.checkResults.every((c) => c.status === 'passed');
 
   return (

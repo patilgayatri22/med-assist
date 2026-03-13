@@ -73,7 +73,7 @@ export function Header({
         <span className="text-xs text-[var(--text-muted)] font-mono" aria-live="polite" title="Current time">
           {formatLiveTime(now)}
         </span>
-        {runTimestamp && (
+        {runTimestamp && isDemoMode && (
           <span className="text-xs text-[var(--text-muted)] font-mono" title="Run started">
             Started {formatTime(runTimestamp)}
           </span>
