@@ -1,0 +1,33 @@
+scenario_id,scenario_type,patient_id,tray_position,ordered_drug,ordered_dose_value,ordered_dose_unit,tray_drug,tray_dose_value,tray_dose_unit,tray_tablet_count,tray_expiry_date,expected_outcome,expected_flag_code,error_description
+SCN-001,CORRECT_MATCH,PT-00101,A1,metformin,500,mg,metformin,500,mg,60,2027-06-30,DISPENSE,NONE,"Drug, dose, tablet count, expiry, and patient all match. Dispense."
+SCN-002,CORRECT_MATCH,PT-00102,A2,lisinopril,10,mg,lisinopril,10,mg,30,2027-03-31,DISPENSE,NONE,"Drug, dose, tablet count, expiry, and patient all match. Dispense."
+SCN-003,CORRECT_MATCH,PT-00103,A3,atorvastatin,40,mg,atorvastatin,40,mg,30,2027-09-30,DISPENSE,NONE,"Drug, dose, tablet count, expiry, and patient all match. Dispense."
+SCN-004,CORRECT_MATCH,PT-00104,A4,omeprazole,20,mg,omeprazole,20,mg,28,2027-12-31,DISPENSE,NONE,"Drug, dose, tablet count, expiry, and patient all match. Dispense."
+SCN-005,CORRECT_MATCH,PT-00105,A5,amoxicillin,500,mg,amoxicillin,500,mg,21,2027-04-30,DISPENSE,NONE,"Drug, dose, tablet count, expiry, and patient all match. Dispense."
+SCN-006,WRONG_DOSE_LOW,PT-00113,B1,metformin,1000,mg,metformin,500,mg,60,2027-06-30,FLAG_WRONG_DOSE,DOSE_LOW,Ordered 1000 mg; tray vial shows 500 mg. Sub-therapeutic if dispensed.
+SCN-007,WRONG_DOSE_HIGH,PT-00114,B2,lisinopril,20,mg,lisinopril,40,mg,30,2027-03-31,FLAG_WRONG_DOSE,DOSE_HIGH,Ordered 20 mg; tray vial shows 40 mg. Risk of hypotension.
+SCN-008,WRONG_DOSE_HIGH,PT-00118,B3,sertraline,50,mg,sertraline,100,mg,30,2027-08-31,FLAG_WRONG_DOSE,DOSE_HIGH,Ordered 50 mg; tray vial shows 100 mg. Double the prescribed dose.
+SCN-009,WRONG_DRUG,PT-00102,B4,lisinopril,10,mg,furosemide,40,mg,30,2027-05-31,FLAG_WRONG_DRUG,WRONG_DRUG,"Completely different drug on tray. Ordered lisinopril, found furosemide."
+SCN-010,WRONG_DRUG,PT-00119,B5,levothyroxine,100,mcg,omeprazole,20,mg,28,2027-11-30,FLAG_WRONG_DRUG,WRONG_DRUG,Ordered levothyroxine; tray has omeprazole. Different drug class entirely.
+SCN-011,LASA_CONFUSION,PT-00101,C1,metformin,500,mg,metoprolol succinate,50,mg,30,2027-07-31,FLAG_LASA,LASA,LASA pair: metformin vs metoprolol. Name prefix identical. Wrong drug class.
+SCN-012,LASA_CONFUSION,PT-00111,C2,glipizide,5,mg,glimepiride,1,mg,30,2027-06-30,FLAG_LASA,LASA,LASA pair: glipizide vs glimepiride. Both sulphonylureas; easy to confuse.
+SCN-013,LASA_CONFUSION,PT-00112,C3,metoprolol succinate,50,mg,metformin,500,mg,60,2027-05-31,FLAG_LASA,LASA,LASA pair: metoprolol vs metformin. Reverse of SCN-011.
+SCN-014,ALREADY_DISPENSED,PT-00106,C4,furosemide,40,mg,furosemide,40,mg,30,2027-09-30,FLAG_ALREADY_DISPENSED,ALREADY_DISPENSED,Drug and dose match but morning dose already dispensed. Double-dose risk.
+SCN-015,HIGH_ALERT_VERIFY,PT-00107,C5,warfarin,5,mg,warfarin,5,mg,30,2027-10-31,FLAG_HIGH_ALERT_VERIFY,HIGH_ALERT,Warfarin: ISMP high-alert. Correct match but requires independent double-check.
+SCN-016,HIGH_ALERT_VERIFY,PT-00108,D1,insulin glargine,20,units,insulin glargine,20,units,1,2027-04-30,FLAG_HIGH_ALERT_VERIFY,HIGH_ALERT,Insulin glargine: ISMP high-alert. Correct match; secondary verification required.
+SCN-017,HIGH_ALERT_VERIFY,PT-00120,D2,insulin regular,10,units,insulin regular,10,units,1,2027-06-30,FLAG_HIGH_ALERT_VERIFY,HIGH_ALERT,Insulin regular: ISMP high-alert. Correct match; secondary verification required.
+SCN-018,ALLERGY,PT-00110,D3,amoxicillin,500,mg,amoxicillin,500,mg,21,2027-04-30,FLAG_ALLERGY,ALLERGY,Patient allergic to penicillin. Amoxicillin is a penicillin-class antibiotic. Halt.
+SCN-019,ALLERGY,PT-00117,D4,ibuprofen,400,mg,ibuprofen,400,mg,24,2027-08-31,FLAG_ALLERGY,ALLERGY,Patient has documented NSAID allergy. Ibuprofen is an NSAID. Halt immediately.
+SCN-020,OUT_OF_RANGE,PT-00115,D5,digoxin,2.5,mg,digoxin,2.5,mg,30,2027-03-31,FLAG_OUT_OF_RANGE,OUT_OF_RANGE,Digoxin 2.5 mg far exceeds therapeutic max (0.25 mg). Likely prescribing error.
+SCN-021,OVERDUE,PT-00116,E1,amlodipine,5,mg,amlodipine,5,mg,30,2027-07-31,FLAG_OVERDUE,OVERDUE,Drug/dose match but order was due at 06:00 and is now overdue. Clinical review needed.
+SCN-022,WRONG_PATIENT,PT-00101,E2,metformin,500,mg,metformin,500,mg,60,2027-06-30,FLAG_WRONG_DRUG,WRONG_PATIENT,Vial matches PT-00101 order but this tray position is assigned to PT-00102 (lisinopril).
+SCN-029,EXPIRED_VIAL,PT-00102,E3,lisinopril,10,mg,lisinopril,10,mg,30,2025-01-31,FLAG_EXPIRED,EXPIRED,Drug and dose match but vial expiry date (2025-01-31) is in the past. Do not dispense.
+SCN-030,EXPIRED_VIAL,PT-00105,E4,amoxicillin,500,mg,amoxicillin,500,mg,21,2024-11-30,FLAG_EXPIRED,EXPIRED,Amoxicillin vial expired Nov 2024. Expired antibiotics may lose potency or become harmful.
+SCN-031,TABLET_COUNT_MISMATCH,PT-00101,F1,metformin,500,mg,metformin,500,mg,28,2027-06-30,FLAG_TABLET_COUNT,TABLET_COUNT,Correct drug and dose but vial label shows 28 tablets; prescription calls for 60. Insufficient supply.
+SCN-032,TABLET_COUNT_MISMATCH,PT-00103,F2,atorvastatin,40,mg,atorvastatin,40,mg,14,2027-09-30,FLAG_TABLET_COUNT,TABLET_COUNT,Vial has 14 tablets; prescribed count is 30. Partial fill requires pharmacist review.
+SCN-023,CORRECT_MATCH,PT-00118,F3,sertraline,50,mg,sertraline,50,mg,30,2027-08-31,DISPENSE,NONE,"Drug, dose, and patient all match. Dispense."
+SCN-024,CORRECT_MATCH,PT-00119,F4,levothyroxine,100,mcg,levothyroxine,100,mcg,30,2027-10-31,DISPENSE,NONE,"Drug, dose, and patient all match. Dispense."
+SCN-025,WRONG_DOSE_HIGH,PT-00107,F5,warfarin,5,mg,warfarin,10,mg,30,2027-10-31,FLAG_WRONG_DOSE,DOSE_HIGH,Warfarin is high-alert AND dose is double what was ordered. Critical halt.
+SCN-026,WRONG_DOSE_LOW,PT-00109,G1,digoxin,0.125,mg,digoxin,0.0625,mg,30,2027-03-31,FLAG_WRONG_DOSE,DOSE_LOW,Digoxin dose halved on vial. High-alert drug with narrow therapeutic index.
+SCN-027,LASA_CONFUSION,PT-00119,G2,levothyroxine,100,mcg,levothyroxine,50,mcg,30,2027-10-31,FLAG_WRONG_DOSE,DOSE_LOW,Correct drug but wrong strength. Levothyroxine dosing is highly patient-specific.
+SCN-028,CORRECT_MATCH,PT-00113,G3,metformin,1000,mg,metformin,1000,mg,60,2027-06-30,DISPENSE,NONE,Correct drug and dose. Brand name (Glucophage) on label maps to metformin. Dispense.

@@ -1,0 +1,21 @@
+patient_id,patient_name,dob,room_number,drug_name_generic,drug_name_brand,dosage_value,dosage_unit,route,frequency,scheduled_time,dispensing_status,high_alert,lasa_risk,lasa_pair,allergies,special_instructions,prescriber,prescribed_tablet_count
+PT-00101,James Okafor,1958-04-12,3A-01,metformin,Glucophage,500,mg,oral,twice daily,08:00,pending,False,True,metoprolol succinate,,,Dr. Chen,60
+PT-00102,Maria Santos,1972-09-03,3A-04,lisinopril,Zestril,10,mg,oral,once daily,09:00,pending,False,False,,,,Dr. Patel,30
+PT-00103,David Nguyen,1965-11-27,3B-08,atorvastatin,Lipitor,40,mg,oral,once daily,21:00,pending,False,False,,,Take with evening meal,Dr. Williams,30
+PT-00104,Priya Sharma,1980-02-14,4A-02,omeprazole,Prilosec,20,mg,oral,once daily,07:30,pending,False,False,,,Take 30 min before breakfast,Dr. Chen,28
+PT-00105,Robert Kimani,1953-07-19,4B-11,amoxicillin,Amoxil,500,mg,oral,three times daily,12:00,pending,False,False,,,,Dr. Osei,21
+PT-00106,Grace Thornton,1969-05-30,3A-06,furosemide,Lasix,40,mg,oral,once daily,08:00,dispensed,False,False,,,Morning dose already given,Dr. Patel,30
+PT-00107,Eleanor Vasquez,1947-12-01,5C-03,warfarin,Coumadin,5,mg,oral,once daily,17:00,pending,True,False,,,INR target 2.0-3.0. Check INR before dispensing.,Dr. Williams,30
+PT-00108,Samuel Lee,1961-08-22,5C-07,insulin glargine,Lantus,20,units,subcutaneous,once daily,22:00,pending,True,False,,,Bedtime dose. Check BGL first.,Dr. Mehta,1
+PT-00109,Fatima Al-Hassan,1975-03-16,4A-09,digoxin,Lanoxin,0.125,mg,oral,once daily,09:00,pending,True,False,,,Hold if HR < 60. Check apical pulse.,Dr. Patel,30
+PT-00110,Carlos Reyes,1988-01-07,3B-12,amoxicillin,Amoxil,500,mg,oral,three times daily,08:00,pending,False,False,,penicillin,ALLERGY: penicillin. Order requires pharmacy review.,Dr. Osei,21
+PT-00111,Yuki Tanaka,1970-06-25,3A-10,glipizide,Glucotrol,5,mg,oral,once daily,08:00,pending,False,True,glimepiride,,,Dr. Mehta,30
+PT-00112,Abena Mensah,1955-10-11,4B-03,metoprolol succinate,Toprol-XL,50,mg,oral,once daily,08:00,pending,False,True,metformin,,,Dr. Chen,30
+PT-00113,Tom O'Brien,1963-09-04,5A-05,metformin,Glucophage,1000,mg,oral,twice daily,08:00,pending,False,True,metoprolol succinate,,,Dr. Williams,60
+PT-00114,Amara Diallo,1978-04-22,3B-06,lisinopril,Zestril,20,mg,oral,once daily,09:00,pending,False,False,,,,Dr. Patel,30
+PT-00115,Helen Park,1949-12-14,5C-01,digoxin,Lanoxin,2.5,mg,oral,once daily,09:00,pending,True,False,,,WARNING: dose appears above therapeutic range. Verify with prescriber.,Dr. Mehta,30
+PT-00116,Kwame Asante,1966-07-30,4A-07,amlodipine,Norvasc,5,mg,oral,once daily,06:00,overdue,False,False,,,,Dr. Chen,30
+PT-00117,Mei-Ling Zhou,1985-03-08,3A-14,ibuprofen,Advil,400,mg,oral,three times daily,12:00,pending,False,False,,NSAIDs,ALLERGY: NSAIDs. Order flagged for pharmacist review.,Dr. Osei,24
+PT-00118,Ibrahim Sow,1971-01-19,4B-07,sertraline,Zoloft,50,mg,oral,once daily,08:00,pending,False,False,,,Take with food,Dr. Williams,30
+PT-00119,Linda Oduya,1960-08-05,3B-02,levothyroxine,Synthroid,100,mcg,oral,once daily,07:00,pending,False,False,,,Take 30 min before food. No calcium/iron within 4 hours.,Dr. Mehta,30
+PT-00120,George Papas,1944-02-28,5C-09,insulin regular,Humulin R,10,units,subcutaneous,as needed,12:00,pending,True,False,,,Sliding scale. Administer if BGL > 12 mmol/L.,Dr. Patel,1
