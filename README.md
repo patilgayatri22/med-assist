@@ -1,4 +1,17 @@
-# MedAssist Agent
+# MedAssist AI
+
+AI-powered medication safety verification system built during the Robotic Agents Hackathon.
+
+## Features
+
+- Medication safety verification with deterministic rule engine
+- LLM reasoning using Featherless AI
+- Toolhouse agent orchestration
+- CSV-based patient medication orders
+- Interactive CLI interface
+- 10+ medical scenario simulation
+
+## Rule Engine Decision Sequence
 
 This version aligns the rule engine to the current MedAssist decision sequence:
 
@@ -17,13 +30,24 @@ This version aligns the rule engine to the current MedAssist decision sequence:
 
 The arm only receives a pick command on an explicit all-clear.
 
+## Tech Stack
+
+- Python
+- Toolhouse
+- Featherless AI
+- Supabase (optional)
+- FastAPI (optional)
+
 ## Files
 
 - `medication_rules.py` - deterministic safety engine
 - `agent_runner.py` - loads CSV data and executes scenarios
 - `llm_toolhouse_client.py` - optional Featherless + Toolhouse summary layer
+- `llm_client.py` - LLM integration with JSON parsing
 - `test_scenarios.py` - validates expected flags across the scenario CSV
-- `main.py` - CLI
+- `main.py` - Interactive CLI interface
+- `robot_controller.py` - Robot control logic
+- `prompts.py` - Medical prompts and instructions
 
 ## Setup
 
@@ -36,8 +60,8 @@ cp .env.example .env
 
 Edit `.env`:
 - add `FEATHERLESS_API_KEY`
-- add rotated `TOOLHOUSE_API_KEY` if you want tool use
-- set `ENABLE_LLM_SUMMARY=true` only after keys are configured
+- add `TOOLHOUSE_API_KEY` if you want tool use
+- set `ROBOT_MODE=cyberwave_twin`
 
 ## Run
 
@@ -47,6 +71,7 @@ python3 main.py
 ```
 
 Inside the CLI:
-- `list`
-- `test`
-- `scenario SCN-015`
+- `list` - List available scenarios
+- `test` - Run test scenarios
+- `scenario SCN-015` - Run specific scenario
+- Interactive modes: Basic, Toolhouse, Scenario Testing

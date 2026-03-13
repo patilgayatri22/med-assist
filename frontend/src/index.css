@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0f1117;
+  --bg-panel: #161b26;
+  --border: #2d3548;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --pass: #22c55e;
+  --fail: #ef4444;
+  --pending: #6b7280;
+  --highalert: #f59e0b;
+  --live-pulse: rgba(34, 197, 94, 0.4);
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+#root {
+  max-width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.live-indicator {
+  animation: pulse-live 1.5s ease-in-out infinite;
+}
