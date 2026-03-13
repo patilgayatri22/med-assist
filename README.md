@@ -1,15 +1,27 @@
-# med-assist
+# MedAssist AI
 
-Monitoring dashboard for the MedAssist agent (vision → checks → dispense / flags).
+AI-powered medication safety verification system built during the Robotic Agents Hackathon.
 
-## Frontend (dashboard)
+## Features
 
-The dashboard lives in `frontend/`. Run it:
+- Medication safety verification
+- LLM reasoning using Featherless AI
+- Toolhouse agent orchestration
+- CSV-based patient medication orders
+- Scenario simulation
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+## Tech Stack
 
-Then open the URL shown (e.g. http://localhost:5173). Use **Run demo** to cycle through scripted states (all pass + arm phases, or halt on allergy); use **Live** when connected to the agent/backend.
+Python
+Toolhouse
+Featherless AI
+Supabase (optional)
+FastAPI (optional)
+
+## Run locally
+
+pip install -r requirements.txt
+
+cp .env.example .env
+
+python backend/main.py
