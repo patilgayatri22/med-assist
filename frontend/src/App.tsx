@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { RunState, DispenseEvent, RunOutcome } from './types/agent';
 import { fetchRunState, fetchDispenseLog } from './api/client';
+import { fetchDispenseLogFromSupabase } from './api/supabaseLogs';
+import { isSupabaseConfigured } from './lib/supabase';
 import { getDemoScript } from './demo/demoRunner';
-import { Header, type DemoScriptType } from './components/Header';
+import { Header, type DemoScriptType, type LogsSource } from './components/Header';
 import { InputsPanel } from './components/InputsPanel';
 import { CheckSequence } from './components/CheckSequence';
 import { PickStatus } from './components/PickStatus';
@@ -28,16 +30,42 @@ export default function App() {
   const [isLive, setIsLive] = useState(true);
   const [isDemoMode, setIsDemoMode] = useState(false);
   const [demoMode, setDemoMode] = useState<DemoScriptType>('success');
+  const [logsSource, setLogsSource] = useState<LogsSource>('demo');
+  const [logsError, setLogsError] = useState<string | null>(null);
+
+  const loadEvents = useCallback(async (source: LogsSource) => {
+    setLogsError(null);
+    if (source === 'supabase') {
+      try {
+        const events = await fetchDispenseLogFromSupabase();
+        setDispenseEvents(events);
+      } catch (err) {
+        setLogsError(err instanceof Error ? err.message : 'Failed to load logs from Supabase');
+        setDispenseEvents([]);
+      }
+    } else {
+      const events = await fetchDispenseLog();
+      setDispenseEvents(events);
+    }
+  }, []);
 
   const loadInitial = useCallback(async () => {
-    const [state, events] = await Promise.all([fetchRunState(), fetchDispenseLog()]);
+    const state = await fetchRunState();
     setRunState(state);
-    setDispenseEvents(events);
-  }, []);
+    await loadEvents(logsSource);
+  }, [logsSource, loadEvents]);
 
   useEffect(() => {
     loadInitial();
   }, [loadInitial]);
+
+  const handleLogsSourceChange = useCallback(
+    (source: LogsSource) => {
+      setLogsSource(source);
+      loadEvents(source);
+    },
+    [loadEvents]
+  );
 
   useEffect(() => {
     if (!isDemoMode || !runState) return;
@@ -106,8 +134,16 @@ export default function App() {
         demoScript={demoMode}
         onDemoScriptChange={setDemoMode}
         onToggleDemo={handleToggleDemo}
+        logsSource={logsSource}
+        onLogsSourceChange={handleLogsSourceChange}
+        supabaseConfigured={isSupabaseConfigured()}
       />
       <main className="flex-1 p-6 max-w-6xl mx-auto w-full space-y-4">
+        {logsError && (
+          <section className="bg-fail/10 border border-fail rounded-lg p-3 text-sm text-fail" role="alert">
+            {logsError}
+          </section>
+        )}
         <Alerts outcome={runState.outcome} checkResults={runState.checkResults} />
         <InputsPanel
           visionPayload={runState.visionPayload}

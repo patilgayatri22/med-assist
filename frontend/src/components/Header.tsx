@@ -17,6 +17,8 @@ const DEMO_OPTIONS: { value: DemoMode; label: string }[] = [
   { value: 'flag_pick_failed', label: 'Pick failed (empty grasp)' },
 ];
 
+export type LogsSource = 'demo' | 'supabase';
+
 interface HeaderProps {
   statusLabel: string;
   outcome?: RunOutcome;
@@ -26,6 +28,9 @@ interface HeaderProps {
   demoScript: DemoScriptType;
   onDemoScriptChange: (script: DemoScriptType) => void;
   onToggleDemo: () => void;
+  logsSource: LogsSource;
+  onLogsSourceChange: (source: LogsSource) => void;
+  supabaseConfigured: boolean;
 }
 
 function getStatusColor(outcome?: RunOutcome): string {
@@ -52,6 +57,9 @@ export function Header({
   demoScript,
   onDemoScriptChange,
   onToggleDemo,
+  logsSource,
+  onLogsSourceChange,
+  supabaseConfigured,
 }: HeaderProps) {
   const [now, setNow] = useState(() => new Date());
 
@@ -86,18 +94,32 @@ export function Header({
       </div>
       <div className="flex items-center gap-2">
         {!isDemoMode && (
-          <select
-            value={demoScript}
-            onChange={(e) => onDemoScriptChange(e.target.value as DemoScriptType)}
-            className="text-sm bg-[var(--bg)] border border-[var(--border)] rounded px-2 py-1.5 text-[var(--text)] max-w-[220px]"
-            aria-label="Demo script"
-          >
-            {DEMO_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
+          <>
+            <select
+              value={demoScript}
+              onChange={(e) => onDemoScriptChange(e.target.value as DemoScriptType)}
+              className="text-sm bg-[var(--bg)] border border-[var(--border)] rounded px-2 py-1.5 text-[var(--text)] max-w-[220px]"
+              aria-label="Demo script"
+            >
+              {DEMO_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            <select
+              value={logsSource}
+              onChange={(e) => onLogsSourceChange(e.target.value as LogsSource)}
+              className="text-sm bg-[var(--bg)] border border-[var(--border)] rounded px-2 py-1.5 text-[var(--text)]"
+              aria-label="Logs source"
+              title={!supabaseConfigured ? 'Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to use Supabase' : undefined}
+            >
+              <option value="demo">Logs: Demo</option>
+              <option value="supabase" disabled={!supabaseConfigured}>
+                Logs: Supabase
               </option>
-            ))}
-          </select>
+            </select>
+          </>
         )}
         <button
           type="button"
