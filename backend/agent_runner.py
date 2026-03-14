@@ -5,15 +5,35 @@ from typing import Any, Dict, Optional
 
 import pandas as pd
 
-from llm_toolhouse_client import summarize_rule_result
 from medication_rules import evaluate_scenario
+
+try:
+    from llm_toolhouse_client import summarize_rule_result
+except Exception:
+    summarize_rule_result = None  # optional: toolhouse/API key not configured
+
+
+def _load_runner_data(root: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Load orders and trays from dispensing_labels folder if present, else from CSVs."""
+    labels_dir = root / "dispensing_labels"
+    if labels_dir.is_dir():
+        try:
+            from label_loader import load_scenarios_from_labels_dir
+            orders_df, trays_df = load_scenarios_from_labels_dir(labels_dir)
+            if not orders_df.empty and not trays_df.empty:
+                return orders_df, trays_df
+        except Exception:
+            pass
+    # Default: CSV inputs
+    orders = pd.read_csv(root / "patient_medication_orders.csv")
+    trays = pd.read_csv(root / "tray_scenarios.csv")
+    return orders, trays
 
 
 class MedAssistRunner:
     def __init__(self, data_dir: Optional[str] = None) -> None:
         root = Path(data_dir or Path(__file__).parent)
-        self.orders = pd.read_csv(root / "patient_medication_orders.csv")
-        self.trays = pd.read_csv(root / "tray_scenarios.csv")
+        self.orders, self.trays = _load_runner_data(root)
 
     def get_order(self, patient_id: str) -> Dict[str, Any]:
         row = self.orders.loc[self.orders["patient_id"] == patient_id]
@@ -45,7 +65,7 @@ Deterministic rule-engine output:
 Explain the robot action without overriding the rule-engine result.
 """.strip()
 
-        llm_summary = summarize_rule_result(prompt, rule_result) if include_llm_summary else None
+        llm_summary = summarize_rule_result(prompt, rule_result) if (include_llm_summary and summarize_rule_result) else None
 
         return {
             "scenario_id": tray["scenario_id"],

@@ -1,16 +1,20 @@
 # MedAssist Monitor (frontend)
 
-Dashboard for the MedAssist agent. Use **Run demo** for scripted flows, or **Logs: Demo** for mock dispense events. To load the dispense event log from Supabase, set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (see `.env.example`), create the `dispense_events` table with `supabase-schema.sql`, then choose **Logs: Supabase** in the header.
+Dashboard for the MedAssist agent.
+
+- **Backend (recommended, no Supabase):** Set `VITE_API_URL` (e.g. `http://localhost:8000`) in `.env.local`. Run state and dispense log come from the backend. In the header, choose **Logs: Backend**. Start the backend with `cd ../backend && uvicorn api_server:app --reload --port 8000`.
+- **Run demo:** Use scripted flows; **Logs: Demo** uses mock data only.
+- **Logs:** **Demo** (mock), **Backend** (requires `VITE_API_URL`), or **Supabase** (optional; requires `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`).
 
 ## Deploy on Vercel
 
 1. **From this repo (monorepo):** In the Vercel project, set **Root Directory** to `med-assist/frontend` so the app builds from this folder.
 2. **Build:** Vercel will use `npm run build` and output `dist` (see `vercel.json`).
 3. **Environment variables:** In Vercel → Project → Settings → Environment Variables, add:
-   - `VITE_SUPABASE_URL` – your Supabase project URL (optional; only needed for **Logs: Supabase**).
-   - `VITE_SUPABASE_ANON_KEY` – your Supabase anon/public key (optional).
+   - `VITE_API_URL` – backend API URL (e.g. your deployed backend) for **Logs: Backend** and run state.
+   - `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` – optional; only needed for **Logs: Supabase**.
 
-If you omit the Supabase vars, the app still runs; **Logs: Supabase** will be disabled and **Logs: Demo** will work.
+You can run with backend only (no Supabase): set `VITE_API_URL` and use **Logs: Backend**.
 
 ---
 

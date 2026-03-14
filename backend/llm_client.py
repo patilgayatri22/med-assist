@@ -1,18 +1,29 @@
 import os
 import json
+from pathlib import Path
 from typing import Any, Dict
 
 from dotenv import load_dotenv
 from openai import OpenAI
 
+# Load .env from backend dir, then frontend .env.local
+_backend_dir = Path(__file__).resolve().parent
+load_dotenv(_backend_dir / ".env")
+load_dotenv(_backend_dir / ".." / "frontend" / ".env.local")
 
-load_dotenv()
-
-FEATHERLESS_API_KEY = os.getenv("FEATHERLESS_API_KEY")
+# Accept FEATHERLESS_API_KEY, OPENAI_API_KEY, or VITE_OPENAI_API_KEY
+FEATHERLESS_API_KEY = (
+    os.getenv("FEATHERLESS_API_KEY")
+    or os.getenv("OPENAI_API_KEY")
+    or os.getenv("VITE_OPENAI_API_KEY")
+)
 MODEL_NAME = os.getenv("MODEL_NAME", "meta-llama/Llama-3.1-8B-Instruct")
 
 if not FEATHERLESS_API_KEY:
-    raise ValueError("FEATHERLESS_API_KEY is missing. Put it in your .env file.")
+    raise ValueError(
+        "API key is missing. Set FEATHERLESS_API_KEY, OPENAI_API_KEY, or VITE_OPENAI_API_KEY "
+        "in backend/.env or frontend/.env.local"
+    )
 
 client = OpenAI(
     base_url="https://api.featherless.ai/v1",

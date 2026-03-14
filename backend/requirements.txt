@@ -1,4 +1,12 @@
 openai
 python-dotenv
+certifi
 toolhouse
 pandas
+fastapi
+uvicorn[standard]
+python-multipart
+# OCR (for POST /api/ocr/extract and prescription_ocr.py)
+easyocr
+ollama
+pydantic

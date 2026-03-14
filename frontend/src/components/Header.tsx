@@ -17,7 +17,7 @@ const DEMO_OPTIONS: { value: DemoMode; label: string }[] = [
   { value: 'flag_pick_failed', label: 'Pick failed (empty grasp)' },
 ];
 
-export type LogsSource = 'demo' | 'supabase';
+export type LogsSource = 'demo' | 'backend' | 'supabase';
 
 interface HeaderProps {
   statusLabel: string;
@@ -30,7 +30,11 @@ interface HeaderProps {
   onToggleDemo: () => void;
   logsSource: LogsSource;
   onLogsSourceChange: (source: LogsSource) => void;
+  backendConfigured: boolean;
   supabaseConfigured: boolean;
+  scenarios?: { scenario_id: string }[];
+  scenarioId?: string | null;
+  onScenarioIdChange?: (id: string) => void;
 }
 
 function getStatusColor(outcome?: RunOutcome): string {
@@ -59,8 +63,13 @@ export function Header({
   onToggleDemo,
   logsSource,
   onLogsSourceChange,
+  backendConfigured,
   supabaseConfigured,
+  scenarios = [],
+  scenarioId,
+  onScenarioIdChange,
 }: HeaderProps) {
+  const hasBackendScenarios = scenarios.length > 0;
   const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
@@ -95,6 +104,22 @@ export function Header({
       <div className="flex items-center gap-2">
         {!isDemoMode && (
           <>
+            {hasBackendScenarios && (
+              <select
+                value={scenarioId ?? ''}
+                onChange={(e) => onScenarioIdChange?.(e.target.value)}
+                className="text-sm bg-[var(--bg)] border border-[var(--border)] rounded px-2 py-1.5 text-[var(--text)] font-mono max-w-[140px]"
+                aria-label="Backend scenario"
+                title="Scenario from backend"
+              >
+                <option value="">Default</option>
+                {scenarios.map((s) => (
+                  <option key={s.scenario_id} value={s.scenario_id}>
+                    {s.scenario_id}
+                  </option>
+                ))}
+              </select>
+            )}
             <select
               value={demoScript}
               onChange={(e) => onDemoScriptChange(e.target.value as DemoScriptType)}
@@ -112,9 +137,18 @@ export function Header({
               onChange={(e) => onLogsSourceChange(e.target.value as LogsSource)}
               className="text-sm bg-[var(--bg)] border border-[var(--border)] rounded px-2 py-1.5 text-[var(--text)]"
               aria-label="Logs source"
-              title={!supabaseConfigured ? 'Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to use Supabase' : undefined}
+              title={
+                logsSource === 'backend' && !backendConfigured
+                  ? 'Set VITE_API_URL to use backend logs'
+                  : !supabaseConfigured && logsSource === 'supabase'
+                    ? 'Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to use Supabase'
+                    : undefined
+              }
             >
               <option value="demo">Logs: Demo</option>
+              <option value="backend" disabled={!backendConfigured}>
+                Logs: Backend
+              </option>
               <option value="supabase" disabled={!supabaseConfigured}>
                 Logs: Supabase
               </option>

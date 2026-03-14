@@ -1,14 +1,25 @@
 import os, json
+from pathlib import Path
 from dotenv import load_dotenv
 from openai import OpenAI
 from toolhouse import Toolhouse
 from prompts import SYSTEM_PROMPT, JSON_OUTPUT_INSTRUCTION
 
-load_dotenv()
+# Load .env from backend dir, then frontend .env.local (so keys in frontend work when running backend)
+_backend_dir = Path(__file__).resolve().parent
+load_dotenv(_backend_dir / ".env")
+load_dotenv(_backend_dir / ".." / "frontend" / ".env.local")
+
+# Accept FEATHERLESS_API_KEY, OPENAI_API_KEY, or VITE_OPENAI_API_KEY (frontend .env.local)
+_api_key = (
+    os.getenv("FEATHERLESS_API_KEY")
+    or os.getenv("OPENAI_API_KEY")
+    or os.getenv("VITE_OPENAI_API_KEY")
+)
 
 client = OpenAI(
     base_url="https://api.featherless.ai/v1",
-    api_key=os.getenv("FEATHERLESS_API_KEY")
+    api_key=_api_key
 )
 
 th = Toolhouse(

@@ -17,12 +17,21 @@ Requirements:
 import argparse
 import base64
 import json
+import os
 import re
 import sqlite3
 import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+
+# Use certifi CA bundle so HTTPS works on macOS (avoids SSL: CERTIFICATE_VERIFY_FAILED)
+try:
+    import certifi
+    os.environ.setdefault("SSL_CERT_FILE", certifi.where())
+    os.environ.setdefault("REQUESTS_CA_BUNDLE", certifi.where())
+except Exception:
+    pass
 
 import easyocr
 import ollama
@@ -163,7 +172,7 @@ def insert_order(
 # OCR extraction
 # ---------------------------------------------------------------------------
 
-# Shared EasyOCR reader (lazy-loaded, English only)
+# Shared EasyOCR reader (lazy-loaded once per process; not re-downloaded per request)
 _ocr_reader: Optional[easyocr.Reader] = None
 
 

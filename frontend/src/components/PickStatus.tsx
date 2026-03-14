@@ -57,9 +57,6 @@ export function PickStatus({ outcome, trayPosition, armPhase, gripConfirmed }: P
         {outcome === 'FLAG_PICK_FAILED' && (
           <p className="text-fail text-sm font-medium">Pick failed — empty grasp</p>
         )}
-        {outcome === 'dispense' && armPhase === 'handoff_ready' && (
-          <p className="text-sm text-[var(--text-muted)] italic">Narrating…</p>
-        )}
       </div>
       {outcome === 'dispense' && (
         <div className="mt-3 flex gap-1" aria-label="Arm phase progress">
